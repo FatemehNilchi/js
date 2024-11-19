@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- ? ميني پروژه چك كردن ورودي ها
+    <div class="container">
+      <div class="form">
+        <input
+          id="name"
+          class="input"
+          type="text" />
+        <input
+          id="password"
+          class="input"
+          type="text" />
+        <button
+          class="btn"
+          onclick="checkValues()">
+          Check
+        </button>
+      </div>
+    </div>
+    <div class="modal">لطفا اطلاعات را به درستي وارد كنيد</div> -->
+    <!-- ---------------------------------------------------- -->
+    <!-- <select class="cities">
+      <option value="Select Country">Select Country...</option>
+      <option value="Iran">Iran</option>
+      <option value="Canada">Canada</option>
+      <option value="United State">United State</option>
+    </select>
+
+    <select class="towns">
+      <option value="Select City">Select City...</option>
+    </select> -->
+    <!-- ------------------------------------------------------------- -->
+    <!-- <p id="title">
+      Convert <span id="first">°C</span> to <span id="second">°F</span>
+    </p>
+    <div>
+      <input
+        type="number"
+        name="input"
+        id="input"
+        placeholder="°C"
+        value="" />
+      <button id="switch">Switch</button>
+      <button id="convert">Convert</button>
+      <button id="clear">Clear</button>
+    </div>
+    <p id="result"></p> -->
+    <!-- ---------------------- -->
+    <!-- <ul class="list">
+   <li ><a class="list-item" href="#">Home</a></li>
+   <li ><a class="list-item" href="#">work</a></li>
+   <li ><a class="list-item" href="#">about us</a></li>
+   <li ><a class="list-item" href="#">contact us</a></li>
+ </ul> -->
+    <!-- --------------------------------------------- -->
+    <!-- oncontextmenu="return false" -->
+    <!-- ديتا ست dataset----------------------------------------------------------------- -->
+    <!-- <button id="infoButton" data-info-text="سلام! به وب‌سایت ما خوش آمدید.">
+      نمایش اطلاعات
+    </button>
+    <p id="infoDisplay"></p>
+    
+    <script>
+      const button = document.getElementById('infoButton');
+      const display = document.getElementById('infoDisplay');
+      
+      button.addEventListener('click', function() {
+        display.textContent = button.dataset.infoText;
+      });
+    </script> -->
+
+    <!-- ديتا ست dataset------------------------------------------------------------------ -->
+    <!-- <ul>
+      <li
+        data-name="محصول 1"
+        data-price="20,000 تومان"
+        data-description="توضیحات محصول 1">
+        محصول 1
+      </li>
+      <li
+        data-name="محصول 2"
+        data-price="15,000 تومان"
+        data-description="توضیحات محصول 2">
+        محصول 2
+      </li>
+      <li
+        data-name="محصول 3"
+        data-price="25,000 تومان"
+        data-description="توضیحات محصول 3">
+        محصول 3
+      </li>
+    </ul>
+
+    <div id="productInfo">
+      //اطلاعات محصول انتخاب شده نمایش داده می‌شود 
+    </div>
+
+    <script>
+      // انتخاب همه آیتم‌های لیست
+      const items = document.querySelectorAll("ul li");
+
+      // انتخاب div برای نمایش اطلاعات محصول
+      const productInfo = document.getElementById("productInfo");
+
+      // افزودن یک event listener به هر آیتم
+      items.forEach((item) => {
+        item.addEventListener("click", () => {
+          const name = item.dataset.name;
+          const price = item.dataset.price;
+          const description = item.dataset.description;
+
+          productInfo.innerHTML = `<h2>${name}</h2><p>قیمت: ${price}</p><p>${description}</p>`;
+        });
+      });
+    </script> -->
+
+    <!-- ---------------------------------------------------------------------------------- -->
+    <!-- //! تمرين مطالب قبلي -->
+    <!-- //? includes() , some(), splice() , every() -->
+    <!-- <input
+      type="text"
+      id="taskInput"
+      placeholder="وظيفه جديد" />
+    <button id="addTaskBtn">اضافه كردن وظيفه</button>
+    <ul id="taskList"></ul>
+    <input
+      type="text"
+      id="taskCheckInput"
+      placeholder="وظيفه براي چك كردن" />
+    <button id="checkTaskBtn">چك كردن وجود وظيفه</button>
+    <button id="checkSomeBtn">چك كردن وظايف طولاني</button>
+    <button id="checkEveryBtn">چك كردن همه وظايف</button> -->
+    <!-- ------------------------------------------------------------ -->
+     <input type="text" placeholder="يك وظيفه را وارد كنيد" id="taskInput">
+     <button >افزودن وظيفه</button>
+     <ul id="taskList"></ul>
+    <script src="appDom.js"></script>
+  </body>
+</html>
