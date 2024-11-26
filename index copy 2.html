@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .project-list, .task-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .project, .task {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            background-color: #fff;
+            width: 200px;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        .task {
+            background-color: #e7f3f8;
+        }
+        .task.completed {
+            background-color: #d3ffd3;
+        }
+        .task.pending {
+            background-color: #fff5d6;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 3px;
+        }
+        .error {
+            color: red;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Project Management</h1>
+
+    <div id="error" class="error hidden"></div>
+
+    <input type="text" id="projectTitle" placeholder="Enter project name" />
+    <button id="addProjectBtn">Add Project</button>
+
+    <div class="project-list" id="projectList"></div>
+
+    <div id="taskSection" class="hidden">
+        <h2>Tasks for <span id="currentProjectTitle"></span></h2>
+        <input type="text" id="taskTitle" placeholder="Enter task name" />
+        <button id="addTaskBtn">Add Task</button>
+        <div class="task-list" id="taskList"></div>
+    </div>
+
+</div>
+
+<script>
+    let projects = JSON.parse(localStorage.getItem("projects")) || [];
+    let currentProjectId = null;
+    const projectTitleInput = document.getElementById("projectTitle");
+    const taskTitleInput = document.getElementById("taskTitle");
+    const addProjectBtn = document.getElementById("addProjectBtn");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const projectList = document.getElementById("projectList");
+    const taskList = document.getElementById("taskList");
+    const taskSection = document.getElementById("taskSection");
+    const currentProjectTitle = document.getElementById("currentProjectTitle");
+    const errorDiv = document.getElementById("error");
+
+    // Show error message
+    function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove("hidden");
+    }
+
+    // Hide error message
+    function hideError() {
+        errorDiv.classList.add("hidden");
+    }
+
+    // Render Projects
+    function renderProjects() {
+        projectList.innerHTML = "";
+        projects.forEach(project => {
+            const projectElement = document.createElement("div");
+            projectElement.classList.add("project");
+            projectElement.textContent = project.title;
+            projectElement.draggable = true;
+            projectElement.dataset.id = project.id;
+            projectElement.addEventListener("click", () => loadTasks(project.id));
+            projectElement.addEventListener("dragstart", (e) => e.dataTransfer.setData('text/plain', project.id));
+            projectList.appendChild(projectElement);
+        });
+    }
+
+    // Render Tasks for a specific project
+    function renderTasks(projectId) {
+        taskList.innerHTML = "";
+        const project = projects.find(p => p.id === projectId);
+        currentProjectTitle.textContent = project.title;
+        project.tasks.forEach(task => {
+            const taskElement = document.createElement("div");
+            taskElement.classList.add("task");
+            taskElement.textContent = task.title;
+            taskElement.classList.add(task.completed ? "completed" : "pending");
+            taskElement.dataset.id = task.id;
+
+            taskElement.addEventListener("click", () => toggleTaskCompletion(projectId, task.id));
+            taskElement.addEventListener("dblclick", () => deleteTask(projectId, task.id));
+            taskList.appendChild(taskElement);
+        });
+    }
+
+    // Load tasks for a selected project
+    function loadTasks(projectId) {
+        currentProjectId = projectId;
+        taskSection.classList.remove("hidden");
+        renderTasks(projectId);
+    }
+
+    // Add Project
+    function addProject() {
+        const projectTitle = projectTitleInput.value.trim();
+        if (projectTitle === "") {
+            showError("Project title is required!");
+            return;
+        }
+        hideError();
+        const newProject = {
+            id: Date.now(),
+            title: projectTitle,
+            tasks: []
+        };
+        projects.push(newProject);
+        localStorage.setItem("projects", JSON.stringify(projects));
+        projectTitleInput.value = "";
+        renderProjects();
+    }
+
+    // Add Task
+    function addTask() {
+        const taskTitle = taskTitleInput.value.trim();
+        if (taskTitle === "") {
+            showError("Task title is required!");
+            return;
+        }
+        hideError();
+        const task = {
+            id: Date.now(),
+            title: taskTitle,
+            completed: false
+        };
+        const project = projects.find(p => p.id === currentProjectId);
+        project.tasks.push(task);
+        localStorage.setItem("projects", JSON.stringify(projects));
+        taskTitleInput.value = "";
+        renderTasks(currentProjectId);
+    }
+
+    // Toggle Task Completion
+    function toggleTaskCompletion(projectId, taskId) {
+        const project = projects.find(p => p.id === projectId);
+        const task = project.tasks.find(t => t.id === taskId);
+        task.completed = !task.completed;
+        localStorage.setItem("projects", JSON.stringify(projects));
+        renderTasks(projectId);
+    }
+
+    // Delete Task
+    function deleteTask(projectId, taskId) {
+        const project = projects.find(p => p.id === projectId);
+        project.tasks = project.tasks.filter(t => t.id !== taskId);
+        localStorage.setItem("projects", JSON.stringify(projects));
+        renderTasks(projectId);
+    }
+
+    // Drag and Drop for Projects
+    projectList.addEventListener("dragover", (e) => {
+        e.preventDefault();
+    });
+
+    projectList.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const draggedProjectId = e.dataTransfer.getData('text/plain');
+        const draggedProject = projects.find(p => p.id == draggedProjectId);
+        projects = projects.filter(p => p.id !== draggedProjectId);
+        projects.unshift(draggedProject);
+        localStorage.setItem("projects", JSON.stringify(projects));
+        renderProjects();
+    });
+
+    // Event Listeners
+    addProjectBtn.addEventListener("click", addProject);
+    addTaskBtn.addEventListener("click", addTask);
+
+    // Initialize app
+    renderProjects();
+</script>
+
+</body>
+</html>
